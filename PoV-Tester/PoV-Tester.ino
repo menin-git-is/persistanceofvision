@@ -8,6 +8,8 @@ void setup() {
   delay(2000);
   motor_setup();
   initLEDs();
+
+  // Array hier initialisieren !!
 }
 
 int IntToBitColumn(int zahl, int * array);
@@ -18,7 +20,9 @@ void loop() {
   for( an=1; an<15; an++) {
     aus=16-an;
     n=IntToBitColumn(an,array); // n size of array
-    Display(n,200,an,aus,array);
+    PovDisplay disp(an, aus, 0);  // PovDisplay::PovDisplay(int led_on, int led_off, int column_gap)
+    disp.display(n, 200, array);  // PovDisplay::display(int arr_len, int wait_after, uint8_t *arr) 
+    // Display(n,200,an,aus,array);
     free(array);
   }
  
