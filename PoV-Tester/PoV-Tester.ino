@@ -1,6 +1,7 @@
 #include "motor.h"
 #include "led.h"
-
+#include "PovDisplay.h"
+#include <stdlib.h>
 
 void setup() {
   // put your setup code here, to run once:
@@ -13,7 +14,7 @@ int IntToBitColumn(int zahl, int * array);
 
 void loop() {
   int an,aus,n;
-  int* array;
+  int* array= NULL;
   for( an=1; an<15; an++) {
     aus=16-an;
     n=IntToBitColumn(an,array); // n size of array
@@ -23,7 +24,7 @@ void loop() {
  
 }
 
-const byte font [10] [8] = {
+const unsigned char font [10] [8] = {
   { 0x3E, 0x7F, 0x71, 0x59, 0x4D, 0x7F, 0x3E, 0x00 }, // '0'
   { 0x40, 0x42, 0x7F, 0x7F, 0x40, 0x40, 0x00, 0x00 }, // '1'
   { 0x62, 0x73, 0x59, 0x49, 0x6F, 0x66, 0x00, 0x00 }, // '2'
@@ -34,9 +35,8 @@ const byte font [10] [8] = {
   { 0x03, 0x03, 0x71, 0x79, 0x0F, 0x07, 0x00, 0x00 }, // '7'
   { 0x36, 0x7F, 0x49, 0x49, 0x7F, 0x36, 0x00, 0x00 }, // '8'
 { 0x06, 0x4F, 0x49, 0x69, 0x3F, 0x1E, 0x00, 0x00 } // '9'
-}
+};
 
-//
 
 int IntToBitColumn(int zahl, int * array) {
    int n;
@@ -48,13 +48,17 @@ int IntToBitColumn(int zahl, int * array) {
      i++;
    }
    n= 8*i;
-   array= malloc(n);
+    array= (int *) malloc((size_t) n );
    int ax=0;
    for(int z=i; z>=0; z--) {
     for(int col=0; col<8; col++ ) {
-      array[ax++]= font[ziffern[z],col];
+      array[ax++]= font [ziffern[z]][col];
     }
    }
    return(n);
 }
+
+
+//
+
 
