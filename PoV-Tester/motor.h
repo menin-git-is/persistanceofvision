@@ -6,10 +6,18 @@ extern "C" {
 #include "user_interface.h"
 }
 
+//original
+//#define A1 D1
+//#define A2 D2
+//#define B1 D3
+//#define B2 D4
+
+
 #define A1 D1
 #define A2 D2
-#define B1 D3
-#define B2 D4
+#define B1 D4
+#define B2 D3
+
 
 uint32_t step_state = 0;
 os_timer_t myTimer;
@@ -32,7 +40,7 @@ void timerCallback(void *pArg) {
     step_pos--;
   }
   step_state = step_state % 4;
-
+ 
   switch (step_state) {
     case 0:
       digitalWrite(A1, HIGH);

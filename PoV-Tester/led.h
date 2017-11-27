@@ -2,9 +2,9 @@
 #define LED_H
 
 #define LED_DATA   D8
-#define LED_CLK    D0
+#define LED_CLK    D6
 #define LED_ENABLE D7
-#define LED_LATCH  D6
+#define LED_LATCH  D0
 
 void initLEDs() {
   pinMode(LED_DATA, OUTPUT);
@@ -16,7 +16,8 @@ void initLEDs() {
 }
 
 void showLEDs(uint8_t data) {
-  shiftOut(LED_DATA, LED_CLK, 0, data);
+  digitalWrite(LED_CLK, LOW);
+  shiftOut(LED_DATA, LED_CLK, MSBFIRST, data);
   digitalWrite(LED_LATCH, HIGH);
   digitalWrite(LED_LATCH, LOW);
 }
