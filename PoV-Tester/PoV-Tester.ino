@@ -1,40 +1,41 @@
 #include "motor.h"
 #include "led.h"
 #include "PovDisplay.h"
-#include <stdlib.h>
+//#include <stdlib.h>
 
 PovDisplay disp;
 
-const int test_arr_size = 50;
-uint8_t test_arr[test_arr_size];
+const int arr_size = 400;
+uint8_t array[arr_size];
 
 void setup() {
   delay(2000);
   Motor::init();
   initLEDs();
-  showLEDs(255);
-  for(int i = 0; i < test_arr_size; i++) {
-    test_arr[i] = i % 255;
-  }
-  disp = PovDisplay();
-  disp.display(test_arr_size, 0, test_arr);
-  // Array hier initialisieren !!
+ // showLEDs(255);
+ // for(int i = 0; i < test_arr_size; i++) {
+ //   test_arr[i] = i % 255;
+ // }
+ // disp = PovDisplay();
+ // disp.display(test_arr_size, 0, test_arr);
+  Serial.begin(9600);
+  while (!Serial) {}
 }
 
-int IntToBitColumn(int zahl, uint8_t * array);
+int IntToBitColumn(int zahl);
 
 void loop() {
-//  int an,aus,n;
-//  uint8_t * array= NULL;
-//  showLEDs(0x01);
-//  for( an=1; an<15; an++) {
-//    aus=16-an;
-//    n=IntToBitColumn(an,array); // n size of array
-//    PovDisplay disp(an, aus, 0);  // PovDisplay::PovDisplay(int led_on, int led_off, int column_gap)
-//    disp.display(n, 200, array);  // PovDisplay::display(int arr_len, int wait_after, uint8_t *arr) 
-//    // Display(n,200,an,aus,array);
-//    free(array);
-//  }
+  int an,aus,versatz,n;
+  versatz=8;
+  
+  for( an=1; an<15; an++) {
+    Serial.println(an);
+    
+    n=IntToBitColumn(17); // n number of columns to display
+    PovDisplay disp(3, 2,versatz);  // PovDisplay::PovDisplay(int led_on, int led_off)
+    disp.display(n, 200, array);  // PovDisplay::display(int arr_len, int wait_after, uint8_t *arr) 
+    // Display(n,200,an,aus,array);
+  }
  
 }
 
@@ -52,23 +53,28 @@ const uint8_t font [10] [8] = {
 };
 
 
-int IntToBitColumn(int zahl, uint8_t * array) {
+int IntToBitColumn(int zahl) {
    int n;
+   const int zwischenraum=3;
    int ziffern[5];
    int i=0;
    while (zahl>0) {
-     ziffern[i]= zahl % 10;
+     ziffern[++i]= zahl % 10;
      zahl = zahl / 10;
-     i++;
    }
-   n= 8*i;
-    array= (uint8_t *) malloc((size_t) n );
-   int ax=0;
-   for(int z=i; z>=0; z--) {
+   n= (8+zwischenraum)*i;
+   int ax=0; 
+   for(int z=i; z>0; z--) {
+    Serial.print("ziffern "); Serial.print(z); Serial.print(" "); Serial.println(ziffern[z]);
     for(int col=0; col<8; col++ ) {
       array[ax++]= font [ziffern[z]][col];
     }
+    Serial.println(ax);
+    for (int col=0; col<zwischenraum; col++) {
+      array[ax++]= 0;
+    }
    }
+  
    return(n);
 }
 
