@@ -12,6 +12,7 @@ void setup() {
   delay(2000);
   Motor::init();
   initLEDs();
+  showLEDs(255);
   for(int i = 0; i < test_arr_size; i++) {
     test_arr[i] = i % 255;
   }
