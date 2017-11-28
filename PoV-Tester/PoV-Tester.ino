@@ -3,28 +3,37 @@
 #include "PovDisplay.h"
 #include <stdlib.h>
 
+PovDisplay disp;
+
+const int test_arr_size = 50;
+uint8_t test_arr[test_arr_size];
+
 void setup() {
   delay(2000);
   Motor::init();
   initLEDs();
-
+  for(int i = 0; i < test_arr_size; i++) {
+    test_arr[i] = i % 255;
+  }
+  disp = PovDisplay();
+  disp.display(test_arr_size, 0, test_arr);
   // Array hier initialisieren !!
 }
 
 int IntToBitColumn(int zahl, uint8_t * array);
 
 void loop() {
-  int an,aus,n;
-  uint8_t * array= NULL;
-  showLEDs(0x01);
-  for( an=1; an<15; an++) {
-    aus=16-an;
-    n=IntToBitColumn(an,array); // n size of array
-    PovDisplay disp(an, aus, 0);  // PovDisplay::PovDisplay(int led_on, int led_off, int column_gap)
-    disp.display(n, 200, array);  // PovDisplay::display(int arr_len, int wait_after, uint8_t *arr) 
-    // Display(n,200,an,aus,array);
-    free(array);
-  }
+//  int an,aus,n;
+//  uint8_t * array= NULL;
+//  showLEDs(0x01);
+//  for( an=1; an<15; an++) {
+//    aus=16-an;
+//    n=IntToBitColumn(an,array); // n size of array
+//    PovDisplay disp(an, aus, 0);  // PovDisplay::PovDisplay(int led_on, int led_off, int column_gap)
+//    disp.display(n, 200, array);  // PovDisplay::display(int arr_len, int wait_after, uint8_t *arr) 
+//    // Display(n,200,an,aus,array);
+//    free(array);
+//  }
  
 }
 

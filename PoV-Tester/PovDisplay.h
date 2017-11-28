@@ -11,6 +11,7 @@ class PovDisplay {
     int cycle_led_on;        // led stays on for x cycles
     int cycle_led_off;       // led stays off afterwards, until next column
     int cycle_wait_after;   // after the whole array was displayed wait for x cycles
+    int tmp = 0; //ToDo remove
 
     int last_cb_pos = 0;         // position when the last callback occured
     int last_col_start = -32000; // last position when the LED was switched on
@@ -19,12 +20,12 @@ class PovDisplay {
     bool running = false;        // display cycle is running; when it's false the 'display' function returns and the callback does nothing
 
   public:
-    PovDisplay(int led_on = 5, int led_off = 10, int column_gap = 10);  // Constructor
+    PovDisplay(int led_on = 5, int led_off = 10);  // Constructor
     void display(int arr_len, int wait_after, uint8_t *arr);  // Initialize write cycle
     void next_step(int pos);  // callback for single steps from the stepper driver
 };
 
-PovDisplay::PovDisplay(int led_on, int led_off, int column_gap) {
+PovDisplay::PovDisplay(int led_on, int led_off) {
   cycle_led_on  = led_on;
   cycle_led_off = led_off;
   Motor::set_callback(std::bind(&PovDisplay::next_step, this, _1));
@@ -36,11 +37,13 @@ void PovDisplay::display(int arr_len, int wait_after, uint8_t *arr) {
   buffer_len = arr_len;
   running = true;
   while (running) {
+    yield();
     // loop until running is set to false
   } 
 }
 
 void PovDisplay::next_step(int pos) {
+  
   if (!running) { return; };
   last_cb_pos = pos;
 
