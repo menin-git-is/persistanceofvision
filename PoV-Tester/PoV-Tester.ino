@@ -12,23 +12,27 @@ void setup() {
   // Array hier initialisieren !!
 }
 
-int IntToBitColumn(int zahl, int * array);
+int IntToBitColumn(int zahl, uint8_t * array);
 
 void loop() {
   int an,aus,n;
-  int* array= NULL;
+  uint8_t * array= NULL;
+  showLEDs(0x01);
   for( an=1; an<15; an++) {
     aus=16-an;
+    showLEDs(0x03);
     n=IntToBitColumn(an,array); // n size of array
+    showLEDs(0x07);
     PovDisplay disp(an, aus, 0);  // PovDisplay::PovDisplay(int led_on, int led_off, int column_gap)
     disp.display(n, 200, array);  // PovDisplay::display(int arr_len, int wait_after, uint8_t *arr) 
     // Display(n,200,an,aus,array);
+    showLEDs(0x2F);
     free(array);
   }
  
 }
 
-const unsigned char font [10] [8] = {
+const uint8_t font [10] [8] = {
   { 0x3E, 0x7F, 0x71, 0x59, 0x4D, 0x7F, 0x3E, 0x00 }, // '0'
   { 0x40, 0x42, 0x7F, 0x7F, 0x40, 0x40, 0x00, 0x00 }, // '1'
   { 0x62, 0x73, 0x59, 0x49, 0x6F, 0x66, 0x00, 0x00 }, // '2'
@@ -42,7 +46,7 @@ const unsigned char font [10] [8] = {
 };
 
 
-int IntToBitColumn(int zahl, int * array) {
+int IntToBitColumn(int zahl, uint8_t * array) {
    int n;
    int ziffern[5];
    int i=0;
@@ -52,7 +56,7 @@ int IntToBitColumn(int zahl, int * array) {
      i++;
    }
    n= 8*i;
-    array= (int *) malloc((size_t) n );
+    array= (uint8_t *) malloc((size_t) n );
    int ax=0;
    for(int z=i; z>=0; z--) {
     for(int col=0; col<8; col++ ) {
