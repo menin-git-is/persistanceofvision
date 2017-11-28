@@ -27,6 +27,7 @@ class PovDisplay {
 PovDisplay::PovDisplay(int led_on, int led_off, int column_gap) {
   cycle_led_on  = led_on;
   cycle_led_off = led_off;
+  Motor::set_callback(std::bind(&PovDisplay::next_step, this, _1));
 }
 
 void PovDisplay::display(int arr_len, int wait_after, uint8_t *arr) {

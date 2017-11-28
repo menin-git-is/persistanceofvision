@@ -1,13 +1,16 @@
 #ifndef MOTOR_H
 #define MOTOR_H
+#include <functional>
+using namespace std::placeholders;
 
-typedef void (call_back)(int);
-
-void startRotating();
-void stopRotating();
-void setCallback(call_back* callback);
-void motor_setup();
-
+namespace Motor {
+  int get_steps_per_turn();
+  void start_rotating();
+  void stop_rotating();
+  void set_speed(float rpm);
+  void set_callback(std::function<void(int)> callback);
+  void init();
+}
 
 #endif
 

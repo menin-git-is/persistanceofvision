@@ -4,9 +4,8 @@
 #include <stdlib.h>
 
 void setup() {
-  // put your setup code here, to run once:
   delay(2000);
-  motor_setup();
+  Motor::init();
   initLEDs();
 
   // Array hier initialisieren !!

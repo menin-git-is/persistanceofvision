@@ -4,17 +4,20 @@ extern "C" {
 }
 #include "motor.h"
 
-
 #define A1 D1
 #define A2 D2
 #define B1 D4
 #define B2 D3
 
+namespace Motor {
 static const float band_width = 125.5 * 3.14;
-static uint32_t step_state = 0;
+static const int steps_per_turn = 64 * 32;
+static uint16_t timer_delay = 7;
+static uint8_t step_state = 0;
 static os_timer_t myTimer;
 static uint16_t step_pos = 0;
 static boolean step_ccw = true;
+static boolean is_initialized = false;
 
 static void do_step() {
   if (step_ccw) {
@@ -25,6 +28,7 @@ static void do_step() {
     step_pos--;
   }
   step_state = step_state % 4;
+  step_pos = step_pos % steps_per_turn;
  
   switch (step_state) {
     case 0:
@@ -54,25 +58,46 @@ static void do_step() {
   }
 }
 
-void emptyCallbackFunction(int pos) { };
+std::function<void(int)> callback_function;
 
-call_back* callback_function = &emptyCallbackFunction;
-
-void setCallback(call_back* callback) {
+void set_callback(std::function<void(int)> callback) {
   callback_function = callback;
 }
 
 void timerCallback(void *pArg) {
   do_step();
-  callback_function(step_pos);
+  if(callback_function)
+    callback_function(step_pos);
 }
 
-void motor_setup() {
-  pinMode(A1, OUTPUT);
-  pinMode(A2, OUTPUT);
-  pinMode(B1, OUTPUT);
-  pinMode(B2, OUTPUT);
-  //http://www.switchdoc.com/2015/10/iot-esp8266-timer-tutorial-arduino-ide/
-  os_timer_setfn(&myTimer, timerCallback, NULL);
-  os_timer_arm(&myTimer, 7, true);
+void start_rotating(){
+  os_timer_arm(&myTimer, timer_delay, true);
+};
+
+void stop_rotating(){
+  os_timer_disarm(&myTimer);
+};
+
+void set_speed(float rpm) {
+  stop_rotating();
+  timer_delay = (steps_per_turn * 1000.0 * 60.0) / rpm;
+  start_rotating();
+};  
+
+void init() {
+  if(!is_initialized) {
+    pinMode(A1, OUTPUT);
+    pinMode(A2, OUTPUT);
+    pinMode(B1, OUTPUT);
+    pinMode(B2, OUTPUT);
+    os_timer_setfn(&myTimer, timerCallback, NULL);
+    os_timer_arm(&myTimer, timer_delay, true);
+    is_initialized = true;
+  }
+}
+
+int get_steps_per_turn() {
+  return steps_per_turn;
+}
+
 }
