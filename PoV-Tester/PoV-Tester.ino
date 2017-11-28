@@ -20,13 +20,10 @@ void loop() {
   showLEDs(0x01);
   for( an=1; an<15; an++) {
     aus=16-an;
-    showLEDs(0x03);
     n=IntToBitColumn(an,array); // n size of array
-    showLEDs(0x07);
     PovDisplay disp(an, aus, 0);  // PovDisplay::PovDisplay(int led_on, int led_off, int column_gap)
     disp.display(n, 200, array);  // PovDisplay::display(int arr_len, int wait_after, uint8_t *arr) 
     // Display(n,200,an,aus,array);
-    showLEDs(0x2F);
     free(array);
   }
  
