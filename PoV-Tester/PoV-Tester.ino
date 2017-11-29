@@ -26,13 +26,13 @@ int IntToBitColumn(int zahl);
 
 void loop() {
   int an,aus,versatz,n;
-  versatz=8;
+  versatz=26;
   
-  for( an=1; an<15; an++) {
-    Serial.println(an);
-    
-    n=IntToBitColumn(17); // n number of columns to display
-    PovDisplay disp(3, 2,versatz);  // PovDisplay::PovDisplay(int led_on, int led_off)
+  for( an=1; an<42; an++) {
+    // Serial.print("an = "); Serial.println(an);
+    Serial.println("next"); 
+    n=IntToBitColumn(an); // n number of columns to display
+    PovDisplay disp(3, 4, versatz);  // PovDisplay::PovDisplay(int led_on, int led_off)
     disp.display(n, 200, array);  // PovDisplay::display(int arr_len, int wait_after, uint8_t *arr) 
     // Display(n,200,an,aus,array);
   }
@@ -65,11 +65,11 @@ int IntToBitColumn(int zahl) {
    n= (8+zwischenraum)*i;
    int ax=0; 
    for(int z=i; z>0; z--) {
-    Serial.print("ziffern "); Serial.print(z); Serial.print(" "); Serial.println(ziffern[z]);
+    //Serial.print("ziffern "); Serial.print(z); Serial.print(" "); Serial.println(ziffern[z]);
     for(int col=0; col<8; col++ ) {
       array[ax++]= font [ziffern[z]][col];
     }
-    Serial.println(ax);
+    //Serial.println(ax);
     for (int col=0; col<zwischenraum; col++) {
       array[ax++]= 0;
     }
